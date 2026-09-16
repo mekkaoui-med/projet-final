@@ -1,4 +1,5 @@
 const readline = require("readline");
+const { normaliserNom } = require("./progression");
 
 const rl = readline.createInterface({
   input: process.stdin,
