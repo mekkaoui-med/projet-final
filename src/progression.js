@@ -116,7 +116,38 @@ function enregistrerResultat(
     };
     apprenant.resultats.push(nouveauResultat);
   }
-  return true
+  return true;
+}
+
+function calculerProgression(apprenant) {
+  let exercicesTermines = 0;
+  let exercicesProposes = 0;
+  let challengesTermine = 0;
+  let journeeRenseignees = 0;
+
+  for (let i = 0; i < apprenant.resultats.length; i++) {
+    exercicesTermines =
+      exercicesTermines + apprenant.resultats[i].exercicesTermines;
+    exercicesProposes =
+      exercicesProposes + apprenant.resultats[i].totalExercices;
+    if (apprenant.resultats[i].challengeTermine) {
+      challengesTermine++;
+    }
+    journeeRenseignees++;
+  }
+  let progression;
+  if (exercicesProposes === 0) {
+    progression = 0;
+  } else {
+    progression = (exercicesTermines / exercicesProposes) * 100 + "%";
+  }
+  return {
+    exercicesTermines: exercicesTermines,
+    exercicesProposes: exercicesProposes,
+    challengesTermine: challengesTermine,
+    progression: progression,
+    journeeRenseignees: journeeRenseignees,
+  };
 }
 
 module.exports = {
@@ -125,4 +156,5 @@ module.exports = {
   ajouterApprenant,
   rechercherApprenant,
   enregistrerResultat,
+  calculerProgression,
 };

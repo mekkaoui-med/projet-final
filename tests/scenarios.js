@@ -5,7 +5,8 @@ const {
   normaliserNom,
   ajouterApprenant,
   rechercherApprenant,
-  enregistrerResultat
+  enregistrerResultat,
+  calculerProgression,
 } = require("../src/progression");
 
 // console.log(validerResultat(1, 18, 20, true));
@@ -72,20 +73,24 @@ const {
 // // Test 4: search by non-existing name
 // console.log("Test 4 - Nom inexistant :");
 // console.log(rechercherApprenant("Mohamed Test"));
-console.log("AVANT :");
-console.log(apprenants[0]);
+// console.log("AVANT :");
+// console.log(apprenants[0]);
 
-console.log("\n--- Test 1 : modifier le jour 1 ---");
+// console.log("\n--- Test 1 : modifier le jour 1 ---");
 
-let resultat1 = enregistrerResultat(
-  1,      // ID de Sara
-  4,      // jour existant
-  19,     // exercices terminés
-  20,     // total exercices
-  false   // challenge
-);
+// let resultat1 = enregistrerResultat(
+//   1, // ID de Sara
+//   4, // jour existant
+//   19, // exercices terminés
+//   20, // total exercices
+//   false, // challenge
+// );
 
-console.log("Résultat :", resultat1);
+// console.log("Résultat :", resultat1);
 
-console.log("APRÈS :");
-console.log(apprenants[0]);
+// console.log("APRÈS :");
+// console.log(apprenants[0]);
+
+let progression = calculerProgression(apprenants[0]);
+
+console.log(progression);
