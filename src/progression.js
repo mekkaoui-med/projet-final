@@ -61,13 +61,13 @@ function ajouterApprenant(id, nomComplet, ville) {
 
 function rechercherApprenant(idOrnom) {
   for (let i = 0; i < apprenants.length; i++) {
-    //id found
+    //found by id
     if (/^\d+$/.test(idOrnom)) {
       if (apprenants[i].id == idOrnom) {
         return apprenants[i];
       }
     } else {
-      // name found
+      // found by name
       if (
         apprenants[i].nomComplet.toLocaleLowerCase() ==
         idOrnom.toLocaleLowerCase()
@@ -78,10 +78,51 @@ function rechercherApprenant(idOrnom) {
   }
   return false;
 }
+function enregistrerResultat(
+  id,
+  jour,
+  exercicesTermines,
+  totalExercices,
+  challengeTermine,
+) {
+  let apprenant = rechercherApprenant(id);
+  if (apprenant === false) {
+    return false;
+  }
+  let validResult = validerResultat(
+    jour,
+    exercicesTermines,
+    totalExercices,
+    challengeTermine,
+  );
+  if (validResult === false) {
+    return false;
+  }
+  let jourExiste = false;
+  for (let i = 0; i < apprenant.resultats.length; i++) {
+    if (apprenant.resultats[i].jour == jour) {
+      apprenant.resultats[i].exercicesTermines = exercicesTermines;
+      apprenant.resultats[i].totalExercices = totalExercices;
+      apprenant.resultats[i].challengeTermine = challengeTermine;
+      jourExiste = true;
+    }
+  }
+  if (jourExiste == false) {
+    let nouveauResultat = {
+      jour: jour,
+      exercicesTermines: exercicesTermines,
+      totalExercices: totalExercices,
+      challengeTermine: challengeTermine,
+    };
+    apprenant.resultats.push(nouveauResultat);
+  }
+  return true
+}
 
 module.exports = {
   normaliserNom,
   validerResultat,
   ajouterApprenant,
   rechercherApprenant,
+  enregistrerResultat,
 };

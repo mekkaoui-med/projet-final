@@ -5,6 +5,7 @@ const {
   normaliserNom,
   ajouterApprenant,
   rechercherApprenant,
+  enregistrerResultat
 } = require("../src/progression");
 
 // console.log(validerResultat(1, 18, 20, true));
@@ -56,18 +57,35 @@ const {
 // console.log("Après le troisième test :");
 // console.log(apprenants);
 
-// Test 1: search by existing ID
-console.log("Test 1 - ID existant :");
-console.log(rechercherApprenant("3"));
+// // Test 1: search by existing ID
+// console.log("Test 1 - ID existant :");
+// console.log(rechercherApprenant("3"));
 
-// Test 2: search by non-existing ID
-console.log("Test 2 - ID inexistant :");
-console.log(rechercherApprenant("10"));
+// // Test 2: search by non-existing ID
+// console.log("Test 2 - ID inexistant :");
+// console.log(rechercherApprenant("10"));
 
-// Test 3: search by existing name
-console.log("Test 3 - Nom existant :");
-console.log(rechercherApprenant("Sara Dev"));
+// // Test 3: search by existing name
+// console.log("Test 3 - Nom existant :");
+// console.log(rechercherApprenant("Sara Dev"));
 
-// Test 4: search by non-existing name
-console.log("Test 4 - Nom inexistant :");
-console.log(rechercherApprenant("Mohamed Test"));
+// // Test 4: search by non-existing name
+// console.log("Test 4 - Nom inexistant :");
+// console.log(rechercherApprenant("Mohamed Test"));
+console.log("AVANT :");
+console.log(apprenants[0]);
+
+console.log("\n--- Test 1 : modifier le jour 1 ---");
+
+let resultat1 = enregistrerResultat(
+  1,      // ID de Sara
+  4,      // jour existant
+  19,     // exercices terminés
+  20,     // total exercices
+  false   // challenge
+);
+
+console.log("Résultat :", resultat1);
+
+console.log("APRÈS :");
+console.log(apprenants[0]);
