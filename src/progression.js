@@ -47,17 +47,17 @@ function ajouterApprenant(id, nomComplet, ville) {
     }
   }
   let nomValid = normaliserNom(nomComplet);
-  if (nomValid === true) {
-    const apprenant = {
-      id: id,
-      nomComplet: nomComplet,
-      ville: ville,
-      resultats: [],
-    };
-    apprenants.push(apprenant);
-    return true;
+  if (nomValid === false) {
+    return false;
   }
-  return false;
+  const apprenant = {
+    id: id,
+    nomComplet: nomValid,
+    ville: ville,
+    resultats: [],
+  };
+  apprenants.push(apprenant);
+  return true;
 }
 
 function rechercherApprenant(idOrnom) {
@@ -173,6 +173,19 @@ function filtrerParNiveau(niveau) {
   return resulat;
 }
 
+function trierParProgression() {
+  let apprenantsData = [...apprenants];
+  apprenantsData.sort(function (i, j) {
+    let indicature1 = calculerProgression(i);
+    let indicature2 = calculerProgression(j);
+
+    let progression1 = indicature1.progression;
+    let progression2 = indicature2.progression;
+    return progression2 - progression1;
+  });
+  return apprenantsData;
+}
+
 module.exports = {
   normaliserNom,
   validerResultat,
@@ -181,4 +194,5 @@ module.exports = {
   enregistrerResultat,
   calculerProgression,
   filtrerParNiveau,
+  trierParProgression,
 };

@@ -8,6 +8,7 @@ const {
   enregistrerResultat,
   calculerProgression,
   filtrerParNiveau,
+  trierParProgression,
 } = require("../src/progression");
 
 // console.log(validerResultat(1, 18, 20, true));
@@ -95,4 +96,16 @@ const {
 // let progression = calculerProgression(apprenants[0]);
 
 // console.log(progression);
-console.log(filtrerParNiveau("En progression"))
+// console.log(filtrerParNiveau("En progression"))
+const resultat = trierParProgression();
+
+for (let i = 0; i < resultat.length; i++) {
+
+  let progression = calculerProgression(resultat[i]);
+
+  console.log(
+    resultat[i].nomComplet,
+    progression.progression + "%"
+  );
+
+}
