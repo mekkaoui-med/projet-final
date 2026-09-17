@@ -34,7 +34,7 @@ const apprenants = [
   {
     id: 3,
     nomComplet: "asmae ismaili",
-    ville: "Asfi",
+    ville: "midelt",
     resultats: [
       {
         jour: 1,

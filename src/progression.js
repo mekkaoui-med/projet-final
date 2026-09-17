@@ -162,9 +162,9 @@ function filtrerParNiveau(niveau) {
     if (progression >= 80) {
       niveau = "Solide";
     } else if (progression >= 50) {
-      niveau = "En progression";
+      niveau = "En Progression";
     } else {
-      niveau = "A renforcer";
+      niveau = "A Renforcer";
     }
     if (niveau === niveau) {
       resulat.push(apprenants[i]);
@@ -173,7 +173,7 @@ function filtrerParNiveau(niveau) {
   return resulat;
 }
 
-function trierParProgression() {
+function  trierParProgression() {
   let apprenantsData = [...apprenants];
   apprenantsData.sort(function (i, j) {
     let indicature1 = calculerProgression(i);
@@ -186,6 +186,60 @@ function trierParProgression() {
   return apprenantsData;
 }
 
+function afficherTableauDeBord() {
+  let totalApprenants = apprenants.length;
+  let sommeProgression = 0;
+
+  for (let i = 0; i < apprenants.length; i++) {
+    let indicature = calculerProgression(apprenants[i]);
+    sommeProgression += indicature.progression;
+  }
+
+  let progressionMoyene = 0;
+
+  if (apprenants.length != 0) {
+    progressionMoyene = sommeProgression / apprenants.length;
+  }
+
+  let Solide = filtrerParNiveau("Solide").length;
+  let EnProgression = filtrerParNiveau("En progression").length;
+  let ARononforce = filtrerParNiveau("À renforcer").length;
+
+  console.log("=================================");
+  console.log("       TABLEAU DE BORD");
+  console.log("=================================");
+  console.log("Total apprenants :", totalApprenants);
+  console.log("Progression moyenne :", progressionMoyene + "%");
+  console.log("Solide :", Solide);
+  console.log("En progression :", EnProgression);
+  console.log("À renforcer :", ARononforce);
+  console.log("=================================");
+
+  let apprenantsTries = trierParProgression();
+
+  for (let i = 0; i < apprenantsTries.length; i++) {
+    let indicature = calculerProgression(apprenantsTries[i]);
+
+    console.log("-" + apprenantsTries[i].nomComplet + ":", indicature.progression + "%");
+
+    for (let jour = 1; jour <= 7; jour++) {
+      let resulatJour = false;
+
+      for (let j = 0; j < apprenantsTries[i].resultats.length; j++) {
+        if (apprenantsTries[i].resultats[j].jour === jour) {
+          resulatJour = apprenantsTries[i].resultats[j];
+        }
+      }
+
+      if (resulatJour === false) {
+        console.log("Jour " + jour + " : non renseigné");
+      } else if (resulatJour.challengeTermine === false) {
+        console.log("Jour " + jour + " : challenge non terminé");
+      }
+    }
+  }
+}
+
 module.exports = {
   normaliserNom,
   validerResultat,
@@ -195,4 +249,5 @@ module.exports = {
   calculerProgression,
   filtrerParNiveau,
   trierParProgression,
+  afficherTableauDeBord
 };

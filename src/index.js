@@ -1,5 +1,6 @@
 const readline = require("readline");
-const { normaliserNom } = require("./progression");
+const { afficherTableauDeBord, } = require("./progression");
+const { apprenants } = require("./data");
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -24,8 +25,7 @@ console.log(`
 `);
 
 rl.question("Choisissez une option : ", (choix) => {
-  console.log("Votre choix est :", choix);
+   rl.close();
   
-
-  rl.close();
 });
+console.log(apprenants)
