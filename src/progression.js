@@ -139,7 +139,7 @@ function calculerProgression(apprenant) {
   if (exercicesProposes === 0) {
     progression = 0;
   } else {
-    progression = (exercicesTermines / exercicesProposes) * 100 + "%";
+    progression = (exercicesTermines / exercicesProposes) * 100 ;
   }
   return {
     exercicesTermines: exercicesTermines,
