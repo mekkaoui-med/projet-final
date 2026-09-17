@@ -139,7 +139,7 @@ function calculerProgression(apprenant) {
   if (exercicesProposes === 0) {
     progression = 0;
   } else {
-    progression = (exercicesTermines / exercicesProposes) * 100 ;
+    progression = (exercicesTermines / exercicesProposes) * 100;
   }
   return {
     exercicesTermines: exercicesTermines,
@@ -150,6 +150,26 @@ function calculerProgression(apprenant) {
   };
 }
 
+function filtrerParNiveau(apprenants, niveau) {
+  let resulat = [];
+  for (let i = 0; i < apprenants.length; i++) {
+    let indicature = calculerProgression(apprenants[i]);
+    let progression = indicature.progression;
+    let niveauCalculer;
+    if (progression >= 80) {
+      niveauCalculer = "Solide";
+    } else if (progression >= 50) {
+      niveauCalculer = "En progression";
+    } else {
+      niveauCalculer = "A renforcer";
+    }
+    if (niveau === niveauCalculer) {
+      resulat.push(apprenants[i]);
+    }
+  }
+  return resulat;
+}
+
 module.exports = {
   normaliserNom,
   validerResultat,
@@ -157,4 +177,5 @@ module.exports = {
   rechercherApprenant,
   enregistrerResultat,
   calculerProgression,
+  filtrerParNiveau,
 };

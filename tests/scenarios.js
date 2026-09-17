@@ -7,6 +7,7 @@ const {
   rechercherApprenant,
   enregistrerResultat,
   calculerProgression,
+  filtrerParNiveau,
 } = require("../src/progression");
 
 // console.log(validerResultat(1, 18, 20, true));
@@ -91,6 +92,9 @@ const {
 // console.log("APRÈS :");
 // console.log(apprenants[0]);
 
-let progression = calculerProgression(apprenants[0]);
+// let progression = calculerProgression(apprenants[0]);
 
-console.log(progression);
+// console.log(progression);
+console.log(filtrerParNiveau(apprenants,"En progression"))
+console.log(filtrerParNiveau(apprenants,"Solide"))
+console.log(filtrerParNiveau(apprenants,"A renforcer"))
