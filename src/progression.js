@@ -46,17 +46,35 @@ function ajouterApprenant(id, nomComplet, ville) {
     }
   }
   let nomValid = normaliserNom(nomComplet);
-  if(nomValid === true){
+  if (nomValid === true) {
+    const apprenant = {
+      id: id,
+      nomComplet: nomComplet,
+      ville: ville,
+      resultats: [],
+    };
+    apprenants.push(apprenant);
+    return true;
+  }
+  return false;
+}
 
-  
-  const apprenant = {
-    id: id,
-    nomComplet: nomComplet,
-    ville: ville,
-    resultats: [],
-  };
-  apprenants.push(apprenant);
-  return true;
+function rechercherApprenant(idOrnom) {
+  for (let i = 0; i < apprenants.length; i++) {
+    //id found
+    if (/^\d+$/.test(idOrnom)) {
+      if (apprenants[i].id == idOrnom) {
+        return apprenants[i];
+      }
+    } else {
+      // name found
+      if (
+        apprenants[i].nomComplet.toLocaleLowerCase() ==
+        idOrnom.toLocaleLowerCase()
+      ) {
+        return apprenants[i];
+      }
+    }
   }
   return false;
 }
@@ -65,4 +83,5 @@ module.exports = {
   normaliserNom,
   validerResultat,
   ajouterApprenant,
+  rechercherApprenant,
 };
