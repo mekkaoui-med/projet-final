@@ -149,8 +149,7 @@ function calculerProgression(apprenant) {
     journeeRenseignees: journeeRenseignees,
   };
 }
-
-function filtrerParNiveau(apprenants, niveau) {
+function filtrerParNiveau(niveau) {
   let resulat = [];
   for (let i = 0; i < apprenants.length; i++) {
     let indicature = calculerProgression(apprenants[i]);

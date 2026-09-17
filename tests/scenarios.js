@@ -95,6 +95,4 @@ const {
 // let progression = calculerProgression(apprenants[0]);
 
 // console.log(progression);
-console.log(filtrerParNiveau(apprenants,"En progression"))
-console.log(filtrerParNiveau(apprenants,"Solide"))
-console.log(filtrerParNiveau(apprenants,"A renforcer"))
+console.log(filtrerParNiveau("En progression"))
