@@ -1,10 +1,11 @@
 const { apprenants } = require("./data");
 
 function normaliserNom(nom) {
+  //fati el dsouli!
   let nomNormalise = nom.trim().toLowerCase();
   let nomVerification = /^[a-z ]+$/;
   if (nomVerification.test(nomNormalise)) {
-    return true;
+    return nomNormalise;
   } else {
     return false;
   }
@@ -131,15 +132,18 @@ function calculerProgression(apprenant) {
     exercicesProposes =
       exercicesProposes + apprenant.resultats[i].totalExercices;
     if (apprenant.resultats[i].challengeTermine) {
+      //cuz challaengeTermine is boolien
       challengesTermine++;
     }
     journeeRenseignees++;
   }
   let progression;
   if (exercicesProposes === 0) {
+    // check if the totalexrc or exProp
     progression = 0;
   } else {
-    progression = (exercicesTermines / exercicesProposes) * 100;
+    progression = (exercicesTermines / exercicesProposes) * 100; // 89.98
+    progression = Number(progression.toFixed(2));
   }
   return {
     exercicesTermines: exercicesTermines,
@@ -152,17 +156,17 @@ function calculerProgression(apprenant) {
 function filtrerParNiveau(niveau) {
   let resulat = [];
   for (let i = 0; i < apprenants.length; i++) {
-    let indicature = calculerProgression(apprenants[i]);
-    let progression = indicature.progression;
-    let niveauCalculer;
+    let indicatureDeProgression = calculerProgression(apprenants[i]);
+    let progression = indicatureDeProgression.progression;
+    let niveau = "";
     if (progression >= 80) {
-      niveauCalculer = "Solide";
+      niveau = "Solide";
     } else if (progression >= 50) {
-      niveauCalculer = "En progression";
+      niveau = "En progression";
     } else {
-      niveauCalculer = "A renforcer";
+      niveau = "A renforcer";
     }
-    if (niveau === niveauCalculer) {
+    if (niveau === niveau) {
       resulat.push(apprenants[i]);
     }
   }
