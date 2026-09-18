@@ -8,7 +8,7 @@ const apprenants = [
         jour: 1,
         exercicesTermines: 18,
         totalExercices: 20,
-        challengeTermine: false,
+        challengeTermine: true,
       },
       {
         jour: 2,
@@ -38,7 +38,13 @@ const apprenants = [
     resultats: [
       {
         jour: 1,
-        exercicesTermines: 8,
+        exercicesTermines: 20,
+        totalExercices: 20,
+        challengeTermine: true,
+      },
+      {
+        jour: 2,
+        exercicesTermines: 20,
         totalExercices: 20,
         challengeTermine: true,
       },

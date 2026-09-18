@@ -7,7 +7,8 @@ const {
   enregistrerResultat,
   filtrerParNiveau,
   trierParProgression,
-  calculerProgression,
+  afficherApprenant,
+  afficherListeApprenants,
 } = require("./progression");
 
 const { apprenants } = require("./data");
@@ -36,167 +37,169 @@ function afficherMenu() {
 `);
 }
 
-rl.question("Choisissez une option : ", (choix) => {
-  console.log("votre choix : ", choix);
-  switch (choix) {
-    case "1":
-      afficherTableauDeBord();
-      rl.close();
-      break;
-
-    case "2":
-      console.dir(apprenants, { depth: null });
-      rl.close();
-      break;
-
-    case "3":
-      rl.question("Identifiant : ", (id) => {
-        rl.question("Nom complet : ", (nomComplet) => {
-          rl.question("Ville : ", (ville) => {
-            let resultat = ajouterApprenant(id, nomComplet, ville);
-
-            if (resultat === true) {
-              console.log("Apprenant ajouté avec succès.");
-            } else {
-              console.log("Impossible d'ajouter l'apprenant.");
-            }
-
-            rl.close();
-          });
-        });
-      });
-      break;
-
-    case "4":
-      rl.question("Identifiant : ", (id) => {
-        let apprenant = rechercherApprenant(id);
-
-        if (apprenant === false) {
-          console.log("Apprenant introuvable.");
-        } else {
-          let statistiques = calculerProgression(apprenant);
-          let niveau = "";
-
-          if (statistiques.progression >= 80) {
-            niveau = "Solide";
-          } else if (statistiques.progression >= 50) {
-            niveau = "En progression";
-          } else {
-            niveau = "À renforcer";
-          }
-
-          console.log("--------------------------------");
-          console.log("Informations de l'apprenant");
-          console.log("--------------------------------");
-          console.log("ID :", apprenant.id);
-          console.log("Nom :", apprenant.nomComplet);
-          console.log("Ville :", apprenant.ville);
-          console.log();
-
-          console.log("Statistiques");
-          console.log("--------------------------------");
-          console.log("Exercices terminés :", statistiques.exercicesTermines);
-          console.log("Total exercices :", statistiques.exercicesProposes);
-          console.log("Challenges terminés :", statistiques.challengesTermine);
-          console.log("Progression :", statistiques.progression + "%");
-          console.log("Niveau :", niveau);
-          console.log("Jours enregistrés :", statistiques.journeeRenseignees);
-          console.log("--------------------------------");
-        }
-
+function continuerOuQuitter() {
+  rl.question(
+    "\nVoulez-vous revenir au menu ? (1 = Oui / 0 = Quitter) : ",
+    (choix) => {
+      if (choix === "1") {
+        demanderChoix();
+      } else if (choix === "0") {
+        console.log("Au revoir !");
         rl.close();
-      });
-      break;
+      } else {
+        console.log("Option invalide. Veuillez choisir 1 ou 0.");
+        continuerOuQuitter();
+      }
+    },
+  );
+}
 
-    case "5":
-      rl.question("Identifiant : ", (id) => {
-        rl.question("Jour : ", (jour) => {
-          rl.question("Exercices terminés : ", (exercicesTermines) => {
-            rl.question("Total exercices : ", (totalExercices) => {
-              rl.question(
-                "Challenge terminé (true/false) : ",
-                (challengeTermine) => {
-                  let resultat = enregistrerResultat(
-                    id,
-                    jour,
-                    exercicesTermines,
-                    totalExercices,
-                    challengeTermine === "true",
-                  );
+function demanderChoix() {
+  afficherMenu();
 
-                  if (resultat === true) {
-                    console.log("Résultat enregistré avec succès.");
-                  } else {
-                    console.log("Impossible d'enregistrer le résultat.");
-                  }
+  rl.question("Choisissez une option : ", (choix) => {
+    console.log("Votre choix :", choix);
 
-                  rl.close();
-                },
-              );
+    switch (choix) {
+      case "1":
+        afficherTableauDeBord();
+
+        continuerOuQuitter();
+        break;
+
+      case "2":
+        afficherListeApprenants(apprenants);
+
+        continuerOuQuitter();
+        break;
+
+      case "3":
+        rl.question("Identifiant : ", (id) => {
+          rl.question("Nom complet : ", (nomComplet) => {
+            rl.question("Ville : ", (ville) => {
+              let resultat = ajouterApprenant(id, nomComplet, ville);
+
+              if (resultat === true) {
+                console.log("Apprenant ajouté avec succès.");
+              } else {
+                console.log(resultat);
+              }
+
+              continuerOuQuitter();
             });
           });
         });
-      });
-      break;
+        break;
 
-    case "6":
-      rl.question("Nom de l'apprenant : ", (nom) => {
-        let apprenant = rechercherApprenant(nom);
+      case "4":
+        rl.question("Identifiant : ", (id) => {
+          let apprenant = rechercherApprenant(id);
 
-        if (apprenant === false) {
-          console.log("Apprenant introuvable.");
-        } else {
-          console.dir(apprenant, { depth: null });
-        }
-
-        rl.close();
-      });
-      break;
-
-    case "7":
-      rl.question(
-        "Niveau (Solide / En Progression / A Renforcer) : ",
-        (niveau) => {
-          let resultat = filtrerParNiveau(niveau);
-
-          if (resultat.length === 0) {
-            console.log("Aucun apprenant trouvé.");
+          if (apprenant === false) {
+            console.log("Apprenant introuvable.");
           } else {
-            console.dir(resultat, { depth: null });
+            afficherApprenant(apprenant);
           }
 
-          rl.close();
-        },
-      );
-      break;
+          continuerOuQuitter();
+        });
+        break;
 
-    case "8":
-      let resultatProgression = trierParProgression();
+      case "5":
+        rl.question("Identifiant : ", (id) => {
+          rl.question("Jour : ", (jour) => {
+            rl.question("Exercices terminés : ", (exercicesTermines) => {
+              rl.question("Total exercices : ", (totalExercices) => {
+                rl.question(
+                  "Challenge terminé (true/false) : ",
+                  (challengeTermine) => {
+                    let resultat = enregistrerResultat(
+                      id,
+                      jour,
+                      exercicesTermines,
+                      totalExercices,
+                      challengeTermine === "true",
+                    );
 
-      console.dir(resultatProgression, { depth: null });
+                    if (resultat === true) {
+                      console.log("Résultat enregistré avec succès.");
+                    } else {
+                      console.log(
+                        "Impossible d'enregistrer le résultat.",
+                      );
+                    }
 
-      rl.close();
-      break;
+                    continuerOuQuitter();
+                  },
+                );
+              });
+            });
+          });
+        });
+        break;
 
-    case "9":
-      let apprenantsAlphabete = [...apprenants];
+      case "6":
+        rl.question("Nom de l'apprenant : ", (nom) => {
+          let apprenant = rechercherApprenant(nom);
 
-      apprenantsAlphabete.sort(function (a, b) {
-        return a.nomComplet.localeCompare(b.nomComplet);
-      });
+          if (apprenant === false) {
+            console.log("Apprenant introuvable.");
+          } else {
+            afficherApprenant(apprenant);
+          }
 
-      console.dir(apprenantsAlphabete, { depth: null });
+          continuerOuQuitter();
+        });
+        break;
 
-      rl.close();
-      break;
+      case "7":
+        rl.question(
+          "Niveau (Solide / En Progression / A renforcer) : ",
+          (niveau) => {
+            let resultat = filtrerParNiveau(niveau);
 
-    case "0":
-      console.log("Au revoir !");
-      rl.close();
-      break;
+            if (resultat.length === 0) {
+              console.log("Aucun apprenant trouvé.");
+            } else {
+              afficherListeApprenants(resultat);
+            }
 
-    default:
-      console.log("Option invalide.");
-      rl.close();
-  }
-});
+            continuerOuQuitter();
+          },
+        );
+        break;
+
+      case "8":
+        let resultatProgression = trierParProgression();
+
+        afficherListeApprenants(resultatProgression);
+
+       continuerOuQuitter();
+        break;
+
+      case "9":
+        let apprenantsAlphabete = [...apprenants];
+
+        apprenantsAlphabete.sort(function (a, b) {
+          return a.nomComplet.localeCompare(b.nomComplet);
+        });
+
+        afficherListeApprenants(apprenantsAlphabete);
+
+       continuerOuQuitter();
+        break;
+
+      case "0":
+        console.log("Au revoir !");
+        rl.close();
+        break;
+
+      default:
+        console.log("Option invalide.");
+
+        demanderChoix();
+    }
+  });
+}
+
+demanderChoix();

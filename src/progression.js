@@ -42,28 +42,36 @@ function validerResultat(
 
 function ajouterApprenant(id, nomComplet, ville) {
   if (!/^\d+$/.test(id)) {
-    return false;
+    return "Identifiant invalide.";
   }
+
   let villeValid = normaliserNom(ville);
+
   if (villeValid === false) {
-    return false;
+    return "Ville invalide.";
   }
+
   for (let i = 0; i < apprenants.length; i++) {
     if (apprenants[i].id == id) {
-      return false;
+      return "Cet identifiant existe déjà.";
     }
   }
+
   let nomValid = normaliserNom(nomComplet);
+
   if (nomValid === false) {
-    return false;
+    return "Nom invalide.";
   }
+
   const apprenant = {
     id: id,
     nomComplet: nomValid,
     ville: villeValid,
     resultats: [],
   };
+
   apprenants.push(apprenant);
+
   return true;
 }
 
@@ -242,8 +250,8 @@ function afficherTableauDeBord() {
       for (let j = 0; j < apprenantsTries[i].resultats.length; j++) {
         if (apprenantsTries[i].resultats[j].jour === jour) {
           resulatJour = apprenantsTries[i].resultats[j];
+          break;
         }
-        break;
       }
 
       if (resulatJour === false) {
@@ -255,6 +263,64 @@ function afficherTableauDeBord() {
   }
 }
 
+function afficherApprenant(apprenant) {
+  let statistiques = calculerProgression(apprenant);
+
+  let niveau = "";
+
+  if (statistiques.progression >= 80) {
+    niveau = "Solide";
+  } else if (statistiques.progression >= 50) {
+    niveau = "En progression";
+  } else {
+    niveau = "À renforcer";
+  }
+
+  console.log("--------------------------------");
+  console.log("Informations de l'apprenant");
+  console.log("--------------------------------");
+  console.log("ID :", apprenant.id);
+  console.log("Nom :", apprenant.nomComplet);
+  console.log("Ville :", apprenant.ville);
+  console.log();
+
+  console.log("Statistiques");
+  console.log("--------------------------------");
+  console.log("Exercices terminés :", statistiques.exercicesTermines);
+  console.log("Total exercices :", statistiques.exercicesProposes);
+  console.log("Challenges terminés :", statistiques.challengesTermine);
+  console.log("Progression :", statistiques.progression + "%");
+  console.log("Niveau :", niveau);
+  console.log("Jours enregistrés :", statistiques.journeeRenseignees);
+  console.log("--------------------------------");
+}
+function afficherListeApprenants(liste) {
+  console.log("--------------------------------");
+  console.log("Liste des apprenants");
+  console.log("--------------------------------");
+
+  for (let i = 0; i < liste.length; i++) {
+    let statistiques = calculerProgression(liste[i]);
+
+    let niveau = "";
+
+    if (statistiques.progression >= 80) {
+      niveau = "Solide";
+    } else if (statistiques.progression >= 50) {
+      niveau = "En progression";
+    } else {
+      niveau = "À renforcer";
+    }
+
+    console.log("ID :", liste[i].id);
+    console.log("Nom :", liste[i].nomComplet);
+    console.log("Ville :", liste[i].ville);
+    console.log("Progression :", statistiques.progression + "%");
+    console.log("Niveau :", niveau);
+    console.log("Jours enregistrés :", statistiques.journeeRenseignees);
+    console.log("--------------------------------");
+  }
+}
 module.exports = {
   normaliserNom,
   validerResultat,
@@ -265,4 +331,6 @@ module.exports = {
   filtrerParNiveau,
   trierParProgression,
   afficherTableauDeBord,
+  afficherApprenant,
+  afficherListeApprenants,
 };
