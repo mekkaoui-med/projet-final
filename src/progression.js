@@ -41,6 +41,13 @@ function validerResultat(
 }
 
 function ajouterApprenant(id, nomComplet, ville) {
+  if (!/^\d+$/.test(id)) {
+    return false;
+  }
+  let villeValid = normaliserNom(ville);
+  if (villeValid === false) {
+    return false;
+  }
   for (let i = 0; i < apprenants.length; i++) {
     if (apprenants[i].id == id) {
       return false;
@@ -53,7 +60,7 @@ function ajouterApprenant(id, nomComplet, ville) {
   const apprenant = {
     id: id,
     nomComplet: nomValid,
-    ville: ville,
+    ville: villeValid,
     resultats: [],
   };
   apprenants.push(apprenant);
