@@ -158,15 +158,15 @@ function filtrerParNiveau(niveau) {
   for (let i = 0; i < apprenants.length; i++) {
     let indicatureDeProgression = calculerProgression(apprenants[i]);
     let progression = indicatureDeProgression.progression;
-    let niveau = "";
+    let niveauCalculer = "";
     if (progression >= 80) {
-      niveau = "Solide";
+      niveauCalculer = "Solide";
     } else if (progression >= 50) {
-      niveau = "En Progression";
+      niveauCalculer = "En Progression";
     } else {
-      niveau = "A Renforcer";
+      niveauCalculer = "A Renforcer";
     }
-    if (niveau === niveau) {
+    if (niveauCalculer === niveau) {
       resulat.push(apprenants[i]);
     }
   }
@@ -202,8 +202,8 @@ function afficherTableauDeBord() {
   }
 
   let Solide = filtrerParNiveau("Solide").length;
-  let EnProgression = filtrerParNiveau("En progression").length;
-  let ARononforce = filtrerParNiveau("À renforcer").length;
+  let EnProgression = filtrerParNiveau("En Progression").length;
+  let ARononforce = filtrerParNiveau("A Renforcer").length;
 
   console.log("=================================");
   console.log("       TABLEAU DE BORD");
