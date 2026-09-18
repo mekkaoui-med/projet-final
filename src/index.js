@@ -7,6 +7,7 @@ const {
   enregistrerResultat,
   filtrerParNiveau,
   trierParProgression,
+  calculerProgression,
 } = require("./progression");
 
 const { apprenants } = require("./data");
@@ -16,7 +17,8 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
-console.log(`
+function afficherMenu() {
+  console.log(`
 =================================
        SAS PROGRESS CONSOLE
 =================================
@@ -32,8 +34,10 @@ console.log(`
 9. Trier les apprenants par ordre alphabétique
 0. Quitter
 `);
+}
 
 rl.question("Choisissez une option : ", (choix) => {
+  console.log("votre choix : ", choix);
   switch (choix) {
     case "1":
       afficherTableauDeBord();
@@ -52,9 +56,9 @@ rl.question("Choisissez une option : ", (choix) => {
             let resultat = ajouterApprenant(id, nomComplet, ville);
 
             if (resultat === true) {
-              console.log("Apprenant ajouté avec succès." )
+              console.log("Apprenant ajouté avec succès.");
             } else {
-              console.log("Impossible d'ajouter l'apprenant, car le id elle deja existe");
+              console.log("Impossible d'ajouter l'apprenant.");
             }
 
             rl.close();
@@ -70,7 +74,34 @@ rl.question("Choisissez une option : ", (choix) => {
         if (apprenant === false) {
           console.log("Apprenant introuvable.");
         } else {
-          console.dir(apprenant, { depth: null });
+          let statistiques = calculerProgression(apprenant);
+          let niveau = "";
+
+          if (statistiques.progression >= 80) {
+            niveau = "Solide";
+          } else if (statistiques.progression >= 50) {
+            niveau = "En progression";
+          } else {
+            niveau = "À renforcer";
+          }
+
+          console.log("--------------------------------");
+          console.log("Informations de l'apprenant");
+          console.log("--------------------------------");
+          console.log("ID :", apprenant.id);
+          console.log("Nom :", apprenant.nomComplet);
+          console.log("Ville :", apprenant.ville);
+          console.log();
+
+          console.log("Statistiques");
+          console.log("--------------------------------");
+          console.log("Exercices terminés :", statistiques.exercicesTermines);
+          console.log("Total exercices :", statistiques.exercicesProposes);
+          console.log("Challenges terminés :", statistiques.challengesTermine);
+          console.log("Progression :", statistiques.progression + "%");
+          console.log("Niveau :", niveau);
+          console.log("Jours enregistrés :", statistiques.journeeRenseignees);
+          console.log("--------------------------------");
         }
 
         rl.close();
@@ -124,7 +155,7 @@ rl.question("Choisissez une option : ", (choix) => {
 
     case "7":
       rl.question(
-        "Niveau (Solide / En progression / À renforcer) : ",
+        "Niveau (Solide / En Progression / A Renforcer) : ",
         (niveau) => {
           let resultat = filtrerParNiveau(niveau);
 

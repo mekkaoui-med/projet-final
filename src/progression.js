@@ -70,8 +70,9 @@ function rechercherApprenant(idOrnom) {
     } else {
       // found by name
       if (
-        apprenants[i].nomComplet.toLocaleLowerCase() ==
-        idOrnom.toLocaleLowerCase()
+        apprenants[i].nomComplet
+          .toLocaleLowerCase()
+          .includes(idOrnom.toLocaleLowerCase())
       ) {
         return apprenants[i];
       }
@@ -86,6 +87,10 @@ function enregistrerResultat(
   totalExercices,
   challengeTermine,
 ) {
+  jour = Number(jour);
+  exercicesTermines = Number(exercicesTermines);
+  totalExercices = Number(totalExercices);
+
   let apprenant = rechercherApprenant(id);
   if (apprenant === false) {
     return false;
@@ -106,6 +111,7 @@ function enregistrerResultat(
       apprenant.resultats[i].totalExercices = totalExercices;
       apprenant.resultats[i].challengeTermine = challengeTermine;
       jourExiste = true;
+      break;
     }
   }
   if (jourExiste == false) {
@@ -131,17 +137,14 @@ function calculerProgression(apprenant) {
       exercicesTermines + apprenant.resultats[i].exercicesTermines;
     exercicesProposes =
       exercicesProposes + apprenant.resultats[i].totalExercices;
-    if (apprenant.resultats[i].challengeTermine) {
+    if (apprenant.resultats[i].challengeTermine == true) {
       //cuz challaengeTermine is boolien
       challengesTermine++;
     }
     journeeRenseignees++;
   }
-  let progression;
-  if (exercicesProposes === 0) {
-    // check if the totalexrc or exProp
-    progression = 0;
-  } else {
+  let progression = 0;
+  if (exercicesProposes > 0) {
     progression = (exercicesTermines / exercicesProposes) * 100; // 89.98
     progression = Number(progression.toFixed(2));
   }
@@ -154,7 +157,7 @@ function calculerProgression(apprenant) {
   };
 }
 function filtrerParNiveau(niveau) {
-  let resulat = [];
+  let resultat = [];
   for (let i = 0; i < apprenants.length; i++) {
     let indicatureDeProgression = calculerProgression(apprenants[i]);
     let progression = indicatureDeProgression.progression;
@@ -167,13 +170,13 @@ function filtrerParNiveau(niveau) {
       niveauCalculer = "A Renforcer";
     }
     if (niveauCalculer === niveau) {
-      resulat.push(apprenants[i]);
+      resultat.push(apprenants[i]);
     }
   }
-  return resulat;
+  return resultat;
 }
 
-function  trierParProgression() {
+function trierParProgression() {
   let apprenantsData = [...apprenants];
   apprenantsData.sort(function (i, j) {
     let indicature1 = calculerProgression(i);
@@ -199,11 +202,12 @@ function afficherTableauDeBord() {
 
   if (apprenants.length != 0) {
     progressionMoyene = sommeProgression / apprenants.length;
+    progressionMoyene = Number(progressionMoyene.toFixed(2));
   }
 
   let Solide = filtrerParNiveau("Solide").length;
   let EnProgression = filtrerParNiveau("En Progression").length;
-  let ARononforce = filtrerParNiveau("A Renforcer").length;
+  let aRononforce = filtrerParNiveau("A Renforcer").length;
 
   console.log("=================================");
   console.log("       TABLEAU DE BORD");
@@ -212,7 +216,7 @@ function afficherTableauDeBord() {
   console.log("Progression moyenne :", progressionMoyene + "%");
   console.log("Solide :", Solide);
   console.log("En progression :", EnProgression);
-  console.log("À renforcer :", ARononforce);
+  console.log("À renforcer :", aRononforce);
   console.log("=================================");
 
   let apprenantsTries = trierParProgression();
@@ -220,7 +224,10 @@ function afficherTableauDeBord() {
   for (let i = 0; i < apprenantsTries.length; i++) {
     let indicature = calculerProgression(apprenantsTries[i]);
 
-    console.log("-" + apprenantsTries[i].nomComplet + ":", indicature.progression + "%");
+    console.log(
+      "-" + apprenantsTries[i].nomComplet + ":",
+      indicature.progression + "%",
+    );
 
     for (let jour = 1; jour <= 7; jour++) {
       let resulatJour = false;
@@ -229,6 +236,7 @@ function afficherTableauDeBord() {
         if (apprenantsTries[i].resultats[j].jour === jour) {
           resulatJour = apprenantsTries[i].resultats[j];
         }
+        break;
       }
 
       if (resulatJour === false) {
@@ -249,5 +257,5 @@ module.exports = {
   calculerProgression,
   filtrerParNiveau,
   trierParProgression,
-  afficherTableauDeBord
+  afficherTableauDeBord,
 };
